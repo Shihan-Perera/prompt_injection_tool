@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Injection Tool</title>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Prompt Injection Tool</h1>
+
+        <!-- Prompt Input Section -->
+        <div class="input-section">
+            <label for="prompt">Enter your prompt here:</label><br>
+            <textarea id="prompt" rows="4" cols="50" placeholder="Type your prompt..."></textarea>
+            <div class="buttons">
+                <button id="submit">Submit</button>
+                <button id="reset">Reset</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-container">
+            <!-- Original Result Section -->
+            <div class="result-section" id="original-result">
+                <h2>Original Result</h2>
+                <p id="originalResultText"></p>
+            </div>
+
+            <!-- Altered Result Section -->
+            <div class="result-section" id="altered-result">
+                <h2>Altered Result</h2>
+                <p id="alteredResultText"></p>
+            </div>
+
+            <div class="result-section" id="original-result">
+                <h2>Prompt Injection Detection</h2>
+                <p id="promptinjection"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission
+        $('#submit').on('click', function() {
+            var inputPrompt = $('#prompt').val(); // Get the user's prompt
+
+            // Send the prompt to the Flask backend using AJAX
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ prompt: inputPrompt }),
+                success: function(response) {
+                    // Update the original and altered result sections
+                    $('#originalResultText').text(response.originalResult);
+                    $('#alteredResultText').text(response.alteredResult);
+                    $('#promptinjection').text(response.promptinjection);
+                }
+            });
+        });
+
+        // Handle form reset
+        $('#reset').on('click', function() {
+            $('#prompt').val(''); // Clear the text area
+            $('#originalResultText').text(''); // Clear the original result
+            $('#alteredResultText').text(''); // Clear the altered result
+            $('#promptinjection').text(''); // Clear the prompt injection result
+        });
+    </script>
+</body>
+</html>
