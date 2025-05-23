@@ -28,7 +28,7 @@ base_model_loaded = AutoModel.from_pretrained("bert-base-uncased") # Make sure b
 reward_model_loaded = RewardModel(base_model_loaded)
 
 # 2. Load the saved state dict
-reward_model_loaded.load_state_dict(torch.load('reward_model_state_dict.pth'))
+reward_model_loaded.load_state_dict(torch.load('models/reward_model_state_dict.pth'))
 reward_model_loaded.eval() # Set to evaluation mode
 
 # Example of using the loaded model for prediction:
@@ -47,7 +47,7 @@ def predict_reward(prompt: str, answer: str, model, tokenizer, max_length=128):
 
 
 # 1. Load tokenizer & model
-model_path = "prompt_model"
+model_path = "models/prompt_model"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 model     = AutoModelForCausalLM.from_pretrained(model_path)
 
